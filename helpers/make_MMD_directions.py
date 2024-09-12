@@ -1,12 +1,10 @@
 # brute force optimization for computing the distance MMD directions on the GPU
 # using PyKeOps
 
-import pickle
 import torch
 from tqdm import tqdm
 import pykeops.torch
 import os
-from scipy.stats import norm
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -53,10 +51,12 @@ for d in ds:
             d > 200
         )  # use only single precision whenever the dimension is larger than 200
         xis = compute_low_discrepancy_points(P, d)
-        if not only_single:
+        if not only_single: # go to double precision and reduce learning rate
             xis = compute_low_discrepancy_points(
                 P, d, init=xis.to(torch.float64), dtype=torch.float64, lr=1e-1
             )
+        else: # only reduce learning rate
+            xis = compute_low_discrepancy_points(P, d, init=xis, lr=1e-1)
 
         path = "../distance_MMD_projs/d" + str(d)
         if not os.path.isdir(path):
