@@ -4,6 +4,7 @@ using Distributions
 using HDF5
 using LinearAlgebra
 using Sobol
+using MLDatasets: MNIST, FashionMNIST
 
 include("src/fastsum.jl")
 include("src/basis_functions.jl")
@@ -30,24 +31,49 @@ if dataset_nr==0
 elseif dataset_nr==1
     d=20
     N=60000
-    fid = h5open("datasets/mnist20.h5","r")
-    x=reshape(collect(fid["data"]),d,N)'
+    # load MNIST dataset
+    dataset=MNIST()
+    X=dataset.features
+    X=reshape(X,:,N)'
+    X=X.-mean(X,dims=1) # center
+
+    # PCA
+    U,s,V=svd(X')
+    mat=U[:,1:d]
+    x=X*mat
 elseif dataset_nr==2
     d=30
     N=60000
-    fid = h5open("datasets/fmnist30.h5","r")
-    x=reshape(collect(fid["data"]),d,N)'
+    # load FashionMNIST dataset
+    dataset=FashionMNIST()
+    X=dataset.features
+    X=reshape(X,:,N)'
+    X=X.-mean(X,dims=1) # center
+
+    # PCA
+    U,s,V=svd(X')
+    mat=U[:,1:d]
+    x=X*mat
 elseif dataset_nr==3
     d=784
     N=60000
-    fid = h5open("datasets/mnist784.h5","r")
-    x=reshape(collect(fid["data"]),d,N)'
+
+    # load MNIST dataset
+    dataset=MNIST()
+    X=dataset.features
+    X=reshape(X,:,N)'
+    X=X.-mean(X,dims=1) # center
 elseif dataset_nr==4
     d=784
     N=60000
-    fid = h5open("datasets/fmnist784.h5","r")
-    x=reshape(collect(fid["data"]),d,N)'
+
+    # load FashionMNIST dataset
+    dataset=FashionMNIST()
+    X=dataset.features
+    X=reshape(X,:,N)'
+    X=X.-mean(X,dims=1) # center
 end
+
 x=convert(Array{Float64},x)
 y=copy(x)
 x_weights=ones(N)
