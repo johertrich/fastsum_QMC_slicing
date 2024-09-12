@@ -23,20 +23,20 @@ include("src/fastsum.jl")
 include("src/basis_functions.jl")
 include("src/utils.jl")
 
-N=100000 # number of data points
-M=N # number of data points
-d=10 # dimension
-P=640 # number of directions
+N = 100000 # number of data points
+M = N # number of data points
+d = 10 # dimension
+P = 640 # number of directions
 fourier_fun(h,scale) = Gaussian_kernel_fun_ft(h,d,scale^2) # implementation of the Fourier transform of the 1D basis function f
 # fourier_fun(h,scale) = Matern_kernel_fun_ft(h,d,scale,nu) # for Matern (and Laplace with nu=0.5)
 
 # generate data
-x=randn(N,d)
-y=randn(N,d)
-x_weights=ones(N)
+x = randn(N,d)
+y = randn(N,d)
+x_weights = ones(N)
 
 # median rule
-sigma=median_distance(x,y,100)
+sigma = median_distance(x,y,100)
 
 # load QMC directions
 fid = h5open("distance_MMD_projs/d"*string(d)*"/P_sym"*string(P)*".h5","r")
