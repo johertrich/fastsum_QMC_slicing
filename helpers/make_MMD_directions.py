@@ -27,7 +27,7 @@ def compute_low_discrepancy_points(
         points = points / torch.sqrt(torch.sum(points**2, -1, keepdim=True))
     else:
         points = init.clone()
-    for it in (progress_bar := tqdm(range(n_iter))):
+    for it in tqdm(range(n_iter)):
         points = points.detach().requires_grad_(True)
         points_big = torch.cat((points, -points), 0)
         grad_big = interaction_derivative(points_big)
@@ -45,17 +45,16 @@ Ps = [5 * 2**k for k in range(11)]
 if not os.path.isdir("../distance_MMD_projs"):
     os.mkdir("../distance_MMD_projs")
 for d in ds:
-    soboleng = torch.quasirandom.SobolEngine(dimension=d, scramble=True)
     for P in Ps:
         only_single = (
             d > 200
         )  # use only single precision whenever the dimension is larger than 200
         xis = compute_low_discrepancy_points(P, d)
-        if not only_single: # go to double precision and reduce learning rate
+        if not only_single:  # go to double precision and reduce learning rate
             xis = compute_low_discrepancy_points(
                 P, d, init=xis.to(torch.float64), dtype=torch.float64, lr=1e-1
             )
-        else: # only reduce learning rate
+        else:  # only reduce learning rate
             xis = compute_low_discrepancy_points(P, d, init=xis, lr=1e-1)
 
         path = "../distance_MMD_projs/d" + str(d)
