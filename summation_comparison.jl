@@ -1,4 +1,4 @@
-# reproduce the results from Section 4.3 (and Appendix G.2) of the paper
+# reproduce the results from Section 4.3 (and corresponding experiments from the appendix) of the paper
 
 using Distributions
 using HDF5
