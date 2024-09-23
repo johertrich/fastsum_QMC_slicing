@@ -65,7 +65,12 @@ In order to make the run times reproducible and less dependent from the specific
 hwloc-bind core:0 julia summation_comparison.jl 0 0
 ```
 
-For generating the QMC directions and plotting the results, we provide helper functions written in Python in the directory `helpers`.
+Finally, the GPU comparison from the Appendix can be reproduced via `gpu_comparison.py` which takes as additional input the kernel number (0 = Gauss, 1 = Matern with `nu=3.5`, 2 = Matern with `nu=1.5`, 3 = Laplace, 4 = negative distance). That is, for the Gauss kernel it can be called by
+```
+python gpu_comparison.py --kernel_nr 0
+```
+
+For generating the QMC directions, we provide a helper function written in Python in the directory `helpers`.
 
 ## Citation
 

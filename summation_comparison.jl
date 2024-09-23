@@ -98,29 +98,29 @@ end
 
 # set kernel-specific parameters
 if kernel_nr==0
-    kernel(x,y)=dropdims(Gauss(reshape(x-y,1,:),med),dims=1)
+    kernel(x,y)=sum(Gauss(reshape(x-y,1,:),med))
     fourier_fun(h,scale)=Gaussian_kernel_fun_ft(h,d,scale^2)
     n_ft=128
     x_range=0.3
 elseif kernel_nr==1
     n_ft=512
     nu=3.5
-    kernel(x,y)=dropdims(Matern(reshape(x-y,1,:),med,3),dims=1)
+    kernel(x,y)=sum(Matern(reshape(x-y,1,:),med,3))
     fourier_fun(h,scale)=Matern_kernel_fun_ft(h,d,scale,nu)
     x_range=0.2
 elseif kernel_nr==2
     n_ft=512
     nu=1.5
-    kernel(x,y)=dropdims(Matern(reshape(x-y,1,:),med,1),dims=1)
+    kernel(x,y)=sum(Matern(reshape(x-y,1,:),med,1))
     fourier_fun(h,scale)=Matern_kernel_fun_ft(h,d,scale,nu)
     x_range=0.2
 elseif kernel_nr==3
     n_ft=1024
-    kernel(x,y)=dropdims(Laplace(reshape(x-y,1,:),1/med),dims=1)
+    kernel(x,y)=sum(Laplace(reshape(x-y,1,:),1/med))
     fourier_fun(h,scale)=Matern_kernel_fun_ft(h,d,scale,0.5)
     x_range=0.1
 elseif kernel_nr==4
-    kernel(x,y)=dropdims(Riesz(reshape(x-y,1,:)),dims=1)
+    kernel(x,y)=sum(Riesz(reshape(x-y,1,:)))
     sliced_factor=compute_sliced_factor(d)
 end
 
