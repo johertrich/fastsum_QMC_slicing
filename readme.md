@@ -5,11 +5,18 @@ If there are any questions, please do not hesitate to contact us.
 
 ## Installation
 
-To install all dependencies simply run
+To install all dependencies for the Julia code simply run
 
 ```
 julia install.jl
 ```
+
+To run the GPU comparison, PyTorch version 2.4 (or newer) is required. Moreover, we use our own implementation of the NFFT,
+which is included in this code and can be installed with
+```
+pip install ./nfft_library
+```
+Other required packages are `pykeops`, `numpy`, `scipy` and `h5py`.
 
 ## General Usage
 
@@ -54,6 +61,8 @@ s = fastsum_fft(x,y,x_weights,sigma,n_ft,x_range,fourier_fun,xis)
 
 ## Reproducing the Results from the Paper
 
+### CPU Comparisons
+
 The scripts `basis_function_approximation.jl` and `summation_comparison.jl` reproduce the examples from Section 4.2 and 4.3 from the paper.
 The first one takes two input parameters from the console: first the dimension and second the scale parameter for scaling the median for kernel parameter selection. For example, in dimension `d=10` and for scale parameter `1.0` (standard median rule), the experiment can be called by:
 ```
@@ -65,7 +74,10 @@ In order to make the run times reproducible and less dependent from the specific
 hwloc-bind core:0 julia summation_comparison.jl 0 0
 ```
 
-Finally, the GPU comparison from the Appendix can be reproduced via `gpu_comparison.py` which takes as additional input the kernel number (0 = Gauss, 1 = Matern with `nu=3.5`, 2 = Matern with `nu=1.5`, 3 = Laplace, 4 = negative distance). That is, for the Gauss kernel it can be called by
+### GPU Comparison
+
+Finally, the GPU comparison from the Appendix can be reproduced via `gpu_comparison.py` which takes as additional input the kernel number (0 = Gauss, 1 = Matern with `nu=3.5`, 2 = Matern with `nu=1.5`, 3 = Laplace, 4 = negative distance). 
+That is, for the Gauss kernel it can be called by
 ```
 python gpu_comparison.py --kernel_nr 0
 ```

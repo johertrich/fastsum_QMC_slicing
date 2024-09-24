@@ -1,0 +1,11 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "simple_torch_NFFT"
+version = "0.1.0"
+description = "Simple but vectorized torch implementation of the NFFT"
+requires-python = ">=3.9"
+dependencies = ["torch"]
+
