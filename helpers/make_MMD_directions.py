@@ -5,6 +5,7 @@ import torch
 from tqdm import tqdm
 import pykeops.torch
 import os
+import h5py
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -62,4 +63,4 @@ for d in ds:
             os.mkdir(path)
         path = path + "/" + "P_sym" + str(P) + ".h5"
         with h5py.File(path, "w") as f:
-            f.create_dataset("xis", data=xis)
+            f.create_dataset("xis", data=xis.detach().cpu().numpy())
