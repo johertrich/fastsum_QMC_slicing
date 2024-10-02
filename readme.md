@@ -12,9 +12,9 @@ julia install.jl
 ```
 
 To run the GPU comparison, PyTorch version 2.4 (or newer) is required. Moreover, we use our own implementation of the NFFT,
-which is included in this code and can be installed with
+which can be installed with
 ```
-pip install ./nfft_library
+pip install git+https://github.com/johertrich/simple_torch_NFFT
 ```
 Other required packages are `pykeops`, `numpy`, `scipy` and `h5py`.
 
@@ -86,4 +86,11 @@ For generating the QMC directions, we provide a helper function written in Pytho
 
 ## Citation
 
-Anonymized for double blind review.
+```
+@article{HJQ2024,
+  title={Fast Summation of Radial Kernels via {QMC} Slicing},
+  author={Hertrich, Johannes and Jahn, Tim, and Quellmalz, Michael},
+  journal={arXiv preprint arXiv:xxxx.xxxxx},
+  year={2024}
+}
+```
