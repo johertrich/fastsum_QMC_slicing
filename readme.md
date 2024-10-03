@@ -1,6 +1,6 @@
 # Fast Summation of Radial Kernels via QMC Slicing
 
-This repository contains the implementations for the paper "Fast Summation of Radial Kernels via QMC Slicing".
+This repository contains the implementations for the paper ["Fast Summation of Radial Kernels via QMC Slicing"](http://arxiv.org/abs/2410.01316).
 If there are any questions, please do not hesitate to contact us.
 
 ## Installation
@@ -89,8 +89,8 @@ For generating the QMC directions, we provide a helper function written in Pytho
 ```
 @article{HJQ2024,
   title={Fast Summation of Radial Kernels via {QMC} Slicing},
-  author={Hertrich, Johannes and Jahn, Tim, and Quellmalz, Michael},
-  journal={arXiv preprint arXiv:xxxx.xxxxx},
+  author={Hertrich, Johannes and Jahn, Tim and Quellmalz, Michael},
+  journal={arXiv preprint arXiv:2410.01316},
   year={2024}
 }
 ```
