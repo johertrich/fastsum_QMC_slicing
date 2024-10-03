@@ -1,6 +1,6 @@
 # Fast Summation of Radial Kernels via QMC Slicing
 
-This repository contains the implementations for the paper ["Fast Summation of Radial Kernels via QMC Slicing"](http://arxiv.org/abs/2410.01316).
+This repository contains the implementations for the paper ["Fast Summation of Radial Kernels via QMC Slicing"](https://arxiv.org/abs/2410.01316).
 If there are any questions, please do not hesitate to contact us.
 
 ## Installation
@@ -11,7 +11,7 @@ To install all dependencies for the Julia code simply run
 julia install.jl
 ```
 
-To run the GPU comparison, PyTorch version 2.4 (or newer) is required. Moreover, we use our own implementation of the NFFT,
+To run the GPU comparison, PyTorch version 2.4 (or newer) is required. Moreover, we use our [own implementation of the NFFT](https://github.com/johertrich/simple_torch_NFFT),
 which can be installed with
 ```
 pip install git+https://github.com/johertrich/simple_torch_NFFT
