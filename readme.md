@@ -1,7 +1,11 @@
 # Fast Summation of Radial Kernels via QMC Slicing
 
-This repository contains the implementations for the paper ["Fast Summation of Radial Kernels via QMC Slicing"](https://arxiv.org/abs/2410.01316).
+This repository contains the implementations for the paper ["Fast Summation of Radial Kernels via QMC Slicing"](https://openreview.net/forum?id=iNmVX9lx9l).
 If there are any questions, please do not hesitate to contact us.
+
+**Note**: **The purpose of this repository is to reproduce the results from [this paper](https://openreview.net/forum?id=iNmVX9lx9l). For Python, a more general implementation of the fast kernel summation is available at [https://github.com/johertrich/simple_torch_NFFT](https://github.com/johertrich/simple_torch_NFFT).**
+
+-------------------------------------------------------------------------------------
 
 ## Installation
 
@@ -11,7 +15,7 @@ To install all dependencies for the Julia code simply run
 julia install.jl
 ```
 
-To run the GPU comparison, PyTorch version 2.4 (or newer) is required. Moreover, we use our [own implementation of the NFFT](https://github.com/johertrich/simple_torch_NFFT),
+To run the GPU comparison, PyTorch version 2.5 (or newer) is required. Moreover, we use our [own implementation of the NFFT](https://github.com/johertrich/simple_torch_NFFT),
 which can be installed with
 ```
 pip install git+https://github.com/johertrich/simple_torch_NFFT
@@ -68,7 +72,7 @@ The first one takes two input parameters from the console: first the dimension a
 ```
 julia basis_function_approximation.jl 10 1.0
 ```
-Similarly, `summation_comparison.jl` takes as input the dataset number (0 = letters (`d=16`), 1 = MNIST (reduced with PCA to `d=20`), 2 = FashionMNIST (reduced with PCA to `d=30`), 3 = MNIST (`d=784`), 4 = FashionMNIST (`d=784`)) and the kernel number (0 = Gauss, 1 = Matern with `nu=3.5`, 2 = Matern with `nu=1.5`, 3 = Laplace, 4 = negative distance).
+Similarly, `summation_comparison.jl` takes as input the dataset number (0 = letters (`d=16`), 1 = MNIST (reduced with PCA to `d=20`), 2 = FashionMNIST (reduced with PCA to `d=30`), 3 = MNIST (`d=784`), 4 = FashionMNIST (`d=784`)) and the kernel number (0 = Gauss, 1 = Matern with `nu=3.5`, 2 = Matern with `nu=1.5`, 3 = Laplace, 4 = negative distance, 5 = thin plate spline).
 In order to make the run times reproducible and less dependent from the specific setup, we ran the time comparisons in `summation_comparison.jl` on a single CPU thread using `hwloc-bind`. Summarizing, for the letters dataset and the Gauss kernel, the experiment can be started with
 ```
 hwloc-bind core:0 julia summation_comparison.jl 0 0
@@ -87,10 +91,11 @@ For generating the QMC directions, we provide a helper function written in Pytho
 ## Citation
 
 ```
-@article{HJQ2024,
+@inproceedings{HJQ2025,
   title={Fast Summation of Radial Kernels via {QMC} Slicing},
-  author={Hertrich, Johannes and Jahn, Tim and Quellmalz, Michael},
-  journal={arXiv preprint arXiv:2410.01316},
-  year={2024}
+  author={Johannes Hertrich and Tim Jahn and Michael Quellmalz},
+  booktitle={The Thirteenth International Conference on Learning Representations},
+  year={2025},
+  url={https://openreview.net/forum?id=iNmVX9lx9l}
 }
 ```
