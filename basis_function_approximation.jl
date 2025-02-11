@@ -25,6 +25,7 @@ n_runs=50
 
 # factor for the negative distance kernel
 sliced_factor=compute_sliced_factor(d)
+thin_plate_C=compute_thin_plate_constant(d)
 
 # initialize distributions
 normal_distr=Normal()
@@ -202,6 +203,10 @@ function compute_errors(x,kernel_nr,scale)
         gt=Riesz(x)
         basis_f=x -> Riesz_f(x,sliced_factor)
         RFF_labels=[]
+    elseif kernel_nr==5 # thin plate
+        gt=thin_plate(x,scale)
+        basis_f=x -> thin_plate_f(x,scale,thin_plate_C,d)
+        RFF_labels=[]
     end
     errors_dict=Dict()
     if d==3
@@ -248,7 +253,7 @@ if !isdir("qmc_comp")
     mkdir("qmc_comp")
 end
 
-for kernel_nr = 0:4
+for kernel_nr = 0:5
     if kernel_nr==4 && kernel_factor!=1.0
         continue
     end

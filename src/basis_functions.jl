@@ -1,6 +1,7 @@
 using HypergeometricFunctions
 using SpecialFunctions
-
+using FFTW
+using Plots
 
 
 function Gauss(x,sigma)
@@ -26,6 +27,27 @@ end
 function Laplace(x,alpha)
     # x -> F(||x||) for basis function F of the Laplace kernel
     return exp.(-alpha*sqrt.(sum(x.^2,dims=2)))
+end
+
+function thin_plate(x,scale)
+    diff_sq= sum(x.^2,dims=2)
+    out = diff_sq/scale^2 .*log.(sqrt.(diff_sq)/scale)
+    out[diff_sq.==0].=0
+    return out
+end
+
+function thin_plate_f(x,scale,C,d)
+    out = d*(x/scale).^2 .*log.(x/scale)-C*(x/scale).^2
+    out[x.==0].=0
+    return out
+end
+
+function thin_plate_fun_ft(grid1d,d,scale,C)
+    n_ft=size(grid1d,1)
+    vect=thin_plate_f(abs.(grid1d/n_ft),scale,C,d)
+    vect_perm=ifftshift(vect)
+    kernel_ft=1/n_ft * fftshift(fft(vect_perm))
+    return kernel_ft
 end
 
 function Gaussian_kernel_fun_ft(grid1d,d,sigma_sq)
@@ -125,4 +147,18 @@ function compute_sliced_factor(d)
         fac=fac*pi/2
     end
     return fac
+end
+
+function compute_thin_plate_constant(d)
+    if d%2==0
+        mysum=0.
+        for k in 1:d/2
+            mysum+=1/k
+        end
+    else
+        grid=0:.001:(1-0.001)
+        integrands=(1 .- grid.^(d/2))./(1 .- grid)
+        mysum=sum(integrands)/size(grid,1)
+    end
+    return -d/2 * (mysum-2+log(4))
 end

@@ -89,6 +89,7 @@ if isfile("kernel_sums/sum_for_ds_"*string(dataset_nr)*"_kernel_"*string(kernel_
     fid = h5open("kernel_sums/sum_for_ds_"*string(dataset_nr)*"_kernel_"*string(kernel_nr)*".h5","r")
     s_true=reshape(collect(fid["s_true"]),N)
     med=collect(fid["med"])
+    close(fid)
     load=true
 else
     # choose kernel parameter by median rule. med=sigma=beta=1/alpha for Gauss/Matern/Laplace
@@ -122,6 +123,12 @@ elseif kernel_nr==3
 elseif kernel_nr==4
     kernel(x,y)=sum(Riesz(reshape(x-y,1,:)))
     sliced_factor=compute_sliced_factor(d)
+elseif kernel_nr==5
+    n_ft=4096
+    kernel(x,y)=sum(thin_plate(reshape(x-y,1,:),med))
+    C=compute_thin_plate_constant(d)
+    fourier_fun(h,scale)=thin_plate_fun_ft(h,d,scale,C)
+    x_range=0.2
 end
 
 if kernel_nr<=3 && d>=100
@@ -139,6 +146,7 @@ if !load
     fid = h5open("kernel_sums/sum_for_ds_"*string(dataset_nr)*"_kernel_"*string(kernel_nr)*".h5","w")
     fid["s_true"]=s_true
     fid["med"]=med
+    close(fid)
 end
 
 # initialize samplers
@@ -295,7 +303,7 @@ function all_errors(P,trials=10)
         xis=rand(normal_distr,P,d)
         xis=xis./sqrt.(sum(xis.^2,dims=2))
         tic=time()
-        if kernel_nr<=3
+        if kernel_nr<=3 || kernel_nr==5
             s= fastsum_fft(x,y,x_weights,med,n_ft,x_range,fourier_fun,xis)
         elseif kernel_nr==4
             s= fastsum_energy(x,y,x_weights,sliced_factor,xis)
@@ -320,7 +328,7 @@ function all_errors(P,trials=10)
         rot,R=qr(rot)
         xis=xis_mmd*rot
         tic=time()
-        if kernel_nr<=3
+        if kernel_nr<=3 || kernel_nr == 5
             s= fastsum_fft(x,y,x_weights,med,n_ft,x_range,fourier_fun,xis)
         elseif kernel_nr==4
             s= fastsum_energy(x,y,x_weights,sliced_factor,xis)
@@ -373,8 +381,10 @@ fid = h5open("results/results_ds_"*string(dataset_nr)*"_kernel_"*string(kernel_n
 for (key,value) in errors
     fid[key]=value
 end
+close(fid)
 fid = h5open("results/results_ds_"*string(dataset_nr)*"_kernel_"*string(kernel_nr)*"_times.h5","w")
 for (key,value) in times
     fid[key]=value
 end
+close(fid)
 
